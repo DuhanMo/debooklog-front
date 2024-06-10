@@ -30,11 +30,13 @@ const Home = () => {
             <h1 className="text-3xl font-bold mb-4 text-center">책장</h1>
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mx-auto">
                 {bookshelves.map((bookshelf) => (
-                    <BookshelfCard
-                        key={bookshelf.id}
-                        name={bookshelf.name}
-                        imageUrl={bookshelf.imageUrl}
-                    />
+                    <div className="flex justify-center">
+                        <BookshelfCard
+                            key={bookshelf.id}
+                            name={bookshelf.name}
+                            imageUrl={bookshelf.imageUrl}
+                        />
+                    </div>
                 ))}
             </div>
         </div>
