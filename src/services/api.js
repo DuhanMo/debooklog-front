@@ -54,32 +54,32 @@ export const fetchBookshelfById = async (bookshelfId) => {
     const mockData = {
       message: "Success",
       data: {
-          name: "책장1",
-          books: [
-              {
-                  id: 0,
-                  bookshelfId: bookshelfId,
-                  title: "목킹된 책 제목",
-                  author: "작가 이름",
-                  isbn: ["1234567890"],
-                  thumbnail: "https://via.placeholder.com/150",
-                  createdAt: "2024-09-04T08:39:35.080Z",
-                  updatedAt: "2024-09-04T08:39:35.080Z"
-              },
-              {
-                  id: 1,
-                  bookshelfId: bookshelfId,
-                  title: "두 번째 책",
-                  author: "다른 작가",
-                  isbn: ["0987654321"],
-                  thumbnail: "https://via.placeholder.com/150",
-                  createdAt: "2024-09-04T08:39:35.080Z",
-                  updatedAt: "2024-09-04T08:39:35.080Z"
-              }
-          ]
+        name: "책장1",
+        books: [
+          {
+            id: 0,
+            bookshelfId: bookshelfId,
+            title: "목킹된 책 제목",
+            author: "작가 이름",
+            isbn: ["1234567890"],
+            thumbnail: "https://via.placeholder.com/150",
+            createdAt: "2024-09-04T08:39:35.080Z",
+            updatedAt: "2024-09-04T08:39:35.080Z"
+          },
+          {
+            id: 1,
+            bookshelfId: bookshelfId,
+            title: "두 번째 책",
+            author: "다른 작가",
+            isbn: ["0987654321"],
+            thumbnail: "https://via.placeholder.com/150",
+            createdAt: "2024-09-04T08:39:35.080Z",
+            updatedAt: "2024-09-04T08:39:35.080Z"
+          }
+        ]
       }
-  };
-  return mockData.data;
+    };
+    return mockData.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to fetch books');
   }

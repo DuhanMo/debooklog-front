@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import { fetchBookshelfById } from "../services/api";
 
 const BookshelfDetail = () => {
-    const { id } = useParams();  
-    const [bookshelf, setBookshelf] = useState(null);  
-    const [loading, setLoading] = useState(true); 
-    const [error, setError] = useState(null); 
+    const { id } = useParams();
+    const [bookshelf, setBookshelf] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const loadBookshelf = async () => {
@@ -19,7 +19,7 @@ const BookshelfDetail = () => {
                 setLoading(false);
             }
         };
-        loadBookshelf();  
+        loadBookshelf();
     }, [id]);
 
     if (loading) {
