@@ -1,7 +1,8 @@
 import axios from "axios";
+const baseUrl = process.env.REACT_APP_SERVER_BASE_URL;
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/api', // 기본 URL 설정
+  baseURL: `${baseUrl}/api`, // 기본 URL 설정
   timeout: 10000, // 요청 타임아웃 설정
 })
 
@@ -82,5 +83,25 @@ export const fetchBookshelfById = async (bookshelfId) => {
     return mockData.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to fetch books');
+  }
+};
+
+
+
+export const redirectOauth2LoginPage = async (provider) => {
+  window.location.href = `${baseUrl}/oauth2/code/${provider}`;
+};
+
+export const getAccessTokenFromUrl = async (code, provider) => {
+  try {
+    const response = await apiClient.post('/auth/token', {
+      code,
+      provider
+    });
+    const { accessToken } = response.data;
+    localStorage.setItem('accessToken', accessToken);
+    return accessToken;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch access token');
   }
 };
