@@ -2,7 +2,7 @@ import axios from "axios";
 const baseUrl = process.env.REACT_APP_SERVER_BASE_URL;
 
 const apiClient = axios.create({
-  baseURL: `${baseUrl}/api`, // 기본 URL 설정
+  baseURL: `${baseUrl}`, // 기본 URL 설정
   timeout: 10000, // 요청 타임아웃 설정
 })
 
@@ -86,22 +86,30 @@ export const fetchBookshelfById = async (bookshelfId) => {
   }
 };
 
-
-
 export const redirectOauth2LoginPage = async (provider) => {
   window.location.href = `${baseUrl}/oauth2/code/${provider}`;
 };
 
 export const getAccessTokenFromUrl = async (code, provider) => {
   try {
-    const response = await apiClient.post('/auth/token', {
+    const response = await apiClient.post('/oauth2/login', {
       code,
       provider
     });
-    const { accessToken } = response.data;
-    localStorage.setItem('accessToken', accessToken);
-    return accessToken;
+
+    if (response.status === 200) {
+      const {accessToken, refreshToken} = response.data
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      return {accessToken, refreshToken}
+    } else {
+      throw new Error("Unexpected response status: " + response.status);
+    }
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Failed to fetch access token');
+    const errorMessage = error.response?.data?.message || "Failed to fetch access token";
+    console.error("Error fetching access token:", errorMessage);
+    throw new Error(errorMessage);
   }
 };
