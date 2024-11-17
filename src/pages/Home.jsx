@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetchBookshelves } from "../services/api";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {fetchBookshelves} from "../services/api";
 
 const Home = () => {
     const [bookshelves, setBookshelves] = useState([]);

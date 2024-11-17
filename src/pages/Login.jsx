@@ -5,28 +5,20 @@ import {getAccessTokenFromUrl, redirectOauth2LoginPage} from "../services/api";
 const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
         const code = urlParams.get("code");
         const provider = urlParams.get("provider");
-
-        console.log("code:", code);
-        console.log("provider:", provider);
-
         if (code && provider) {
             const fetchToken = async () => {
-                setLoading(true);
                 try {
                     await getAccessTokenFromUrl(code, provider);
                     navigate("/", {replace: true});
                 } catch (err) {
-                    console.log("Failed to fetch access token:", err);
                     setError("Failed to login, Please try again");
                 } finally {
-                    setLoading(false);
                 }
             };
             fetchToken();
