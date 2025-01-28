@@ -1,10 +1,11 @@
 import React from 'react';
 
 const providers = ['GOOGLE', 'KAKAO']; // 필요에 따라 추가 가능
+const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL
 
 function Login() {
     const handleLogin = (provider) => {
-        window.location.href = `http://localhost:8080/oauth2/code/${provider}`;
+        window.location.href = `${SERVER_BASE_URL}/oauth2/code/${provider}`;
     };
 
     return (

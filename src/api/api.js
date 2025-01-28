@@ -1,8 +1,8 @@
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL
 
 export const fetchBookshelves = async () => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/bookshelves`);
+        const response = await fetch(`${SERVER_BASE_URL}/api/bookshelves`);
         if (!response.ok) {
             throw new Error("Failed to fetch bookshelves");
         }
@@ -15,7 +15,7 @@ export const fetchBookshelves = async () => {
 
 export const loginWithOAuth2 = async (provider, code) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/oauth2/login`, {
+        const response = await fetch(`${SERVER_BASE_URL}/oauth2/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
