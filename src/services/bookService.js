@@ -97,3 +97,16 @@ export const deleteBook = async (bookId) => {
         throw error;
     }
 };
+
+/**
+ * 인기 책 랭킹 조회 서비스
+ * @returns {Promise<Object[]>} - 인기 책 랭킹 목록
+ */
+export const getBookRanks = async () => {
+    try {
+        return await booksApi.findBookRanks();
+    } catch (error) {
+        console.error("책 랭킹 데이터를 불러오는 데 실패했습니다.");
+        throw error;
+    }
+};

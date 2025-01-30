@@ -102,3 +102,18 @@ export const deleteBook = async (bookId) => {
         throw error;
     }
 };
+
+/**
+ * 인기 책 랭킹 조회
+ * @returns {Promise<Object[]>} - 인기 책 랭킹 목록
+ */
+export const findBookRanks = async () => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/api/books/ranks`);
+        return response.data.data; // [{ rank, isbn, bookTitle, count }, ...]
+    } catch (error) {
+        console.error("책 랭킹 조회 실패:", error);
+        throw error;
+    }
+};
+

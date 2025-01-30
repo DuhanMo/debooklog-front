@@ -3,10 +3,6 @@ import { BookshelfContext } from "../context/BookshelfContext";
 import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
 
-/**
- * 홈 페이지 컴포넌트
- * @returns {JSX.Element}
- */
 const Home = () => {
     const { bookshelves, fetchBookshelves } = useContext(BookshelfContext);
 

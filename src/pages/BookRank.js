@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { booksApi } from "../api";
+import { getBookRanks } from "../services/bookService";
 import Loading from "../components/Loading";
 
 /**
@@ -18,8 +18,8 @@ const BookRank = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await booksApi.findBookRanks();
-            setRanks(response.data);
+            const response = await getBookRanks();
+            setRanks(response);
         } catch (err) {
             setError("책 랭킹 데이터를 불러오는 데 실패했습니다.");
         } finally {

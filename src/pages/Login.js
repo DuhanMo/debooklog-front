@@ -1,5 +1,6 @@
 import React from "react";
-import { getOAuth2LoginUrl } from "../api/auth";
+import { getOAuth2LoginUrl } from "../services/authService";
+
 
 /**
  * 로그인 페이지 컴포넌트

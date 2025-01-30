@@ -1,5 +1,15 @@
 import { authApi } from "../api";
 import { getAccessToken, setAccessToken, removeAccessToken } from "../utils/localStorage";
+import {fetchOAuth2LoginUrl} from "../api/auth";
+
+
+/**
+ * 소셜 로그인 URL 가져오기 (클라이언트 -> 서버 -> 소셜 로그인 페이지 리다이렉트)
+ * @param {string} provider - "GOOGLE", "KAKAO", "GITHUB"
+ */
+export const getOAuth2LoginUrl = (provider) => {
+    return fetchOAuth2LoginUrl(provider);
+};
 
 /**
  * OAuth2 로그인 처리

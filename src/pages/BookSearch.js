@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { searchBooks } from "../api/books";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Loading from "../components/Loading";
+import {searchBooks} from "../services/bookService";
 
 /**
  * 책 검색 페이지

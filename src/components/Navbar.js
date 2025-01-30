@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { authApi } from "../api";
 
 /**
  * 네비게이션 바 컴포넌트

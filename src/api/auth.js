@@ -6,7 +6,7 @@ const API_BASE_URL = "http://debooklog.ap-northeast-2.elasticbeanstalk.com";
  * 소셜 로그인 URL 가져오기 (클라이언트 -> 서버 -> 소셜 로그인 페이지 리다이렉트)
  * @param {string} provider - "GOOGLE", "KAKAO", "GITHUB"
  */
-export const getOAuth2LoginUrl = (provider) => {
+export const fetchOAuth2LoginUrl = (provider) => {
     return `${API_BASE_URL}/oauth2/code/${provider}`;
 };
 
