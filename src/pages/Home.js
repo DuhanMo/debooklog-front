@@ -1,30 +1,30 @@
-import React, { useContext } from "react";
-import { BookshelfContext } from "../context/BookshelfContext";
-import { Link } from "react-router-dom";
-import Loading from "../components/Loading";
+import React, { useEffect, useState } from "react";
+import { getBookshelves } from "../services/bookshelfService";
+import BookshelfList from "../components/BookshelfList";
 
 const Home = () => {
-    const { bookshelves, fetchBookshelves } = useContext(BookshelfContext);
+    const [bookshelves, setBookshelves] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    if (!bookshelves) {
-        return <Loading />;
-    }
+    useEffect(() => {
+        const fetchBookshelves = async () => {
+            try {
+                const data = await getBookshelves();
+                setBookshelves(data);
+            } catch (error) {
+                console.error("책장 목록을 불러오는 중 오류 발생:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBookshelves();
+    }, []);
 
     return (
         <div>
-            <h1>책장 목록</h1>
-            <button onClick={fetchBookshelves}>새로고침</button>
-            <ul>
-                {bookshelves.length > 0 ? (
-                    bookshelves.map((shelf) => (
-                        <li key={shelf.id}>
-                            <Link to={`/bookshelves/${shelf.id}`}>{shelf.name}</Link>
-                        </li>
-                    ))
-                ) : (
-                    <p>책장이 없습니다.</p>
-                )}
-            </ul>
+            <h1>홈 화면</h1>
+            {loading ? <p>로딩 중...</p> : <BookshelfList bookshelves={bookshelves} />}
         </div>
     );
 };

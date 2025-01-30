@@ -1,7 +1,6 @@
 import React from "react";
-import { AuthProvider } from "./context/AuthContext";
-import { BookshelfProvider } from "./context/BookshelfContext";
-import AppRouter from "./routes/Router";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import Home from "./pages/Home";
 
 /**
  * 애플리케이션의 루트 컴포넌트
@@ -9,11 +8,11 @@ import AppRouter from "./routes/Router";
  */
 const App = () => {
     return (
-        <BookshelfProvider> {/* ✅ BookshelfProvider가 먼저 감싸도록 수정 */}
-            <AuthProvider>
-                <AppRouter />
-            </AuthProvider>
-        </BookshelfProvider>
+        <Router>
+            <Routes>
+                <Route path="/" element={<Home />} />
+            </Routes>
+        </Router>
     );
 };
 
