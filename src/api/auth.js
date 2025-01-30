@@ -1,6 +1,7 @@
-import axios from "axios";
+import apiClient from "../utils/apiClient";
+import CONFIG from "../config";
 
-const API_BASE_URL = "http://debooklog.ap-northeast-2.elasticbeanstalk.com";
+const API_BASE_URL = CONFIG.API_BASE_URL;
 
 /**
  * 소셜 로그인 URL 가져오기 (클라이언트 -> 서버 -> 소셜 로그인 페이지 리다이렉트)
@@ -18,12 +19,8 @@ export const fetchOAuth2LoginUrl = (provider) => {
  */
 export const loginWithOAuth2 = async (code, provider) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/oauth2/login`, {
-            code,
-            provider,
-        });
-
-        return response.data; // { accessToken, refreshToken }
+        const response = await apiClient.post("/oauth2/login", { code, provider });
+        return response.data;
     } catch (error) {
         console.error("OAuth2 로그인 실패:", error);
         throw error;

@@ -1,6 +1,7 @@
-import axios from "axios";
+import apiClient from "../utils/apiClient";
+import CONFIG from "../config";
 
-const API_BASE_URL = "http://debooklog.ap-northeast-2.elasticbeanstalk.com";
+const API_BASE_URL = CONFIG.API_BASE_URL;
 
 /**
  * 새로운 책 등록
@@ -9,7 +10,7 @@ const API_BASE_URL = "http://debooklog.ap-northeast-2.elasticbeanstalk.com";
  */
 export const registerBook = async (bookData) => {
     try {
-        await axios.post(`${API_BASE_URL}/api/books`, bookData);
+        await apiClient.post(`${API_BASE_URL}/api/books`, bookData);
     } catch (error) {
         console.error("책 등록 실패:", error);
         throw error;
@@ -23,7 +24,7 @@ export const registerBook = async (bookData) => {
  */
 export const searchBooks = async (title) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/api/books/search`, {
+        const response = await apiClient.get(`${API_BASE_URL}/api/books/search`, {
             params: { title },
         });
         return response.data.data; // [{ title, author, isbn, thumbnail }, ...]
@@ -40,7 +41,7 @@ export const searchBooks = async (title) => {
  */
 export const likeBook = async (bookId) => {
     try {
-        await axios.post(`${API_BASE_URL}/api/books/${bookId}/like`);
+        await apiClient.post(`${API_BASE_URL}/api/books/${bookId}/like`);
     } catch (error) {
         console.error("책 좋아요 실패:", error);
         throw error;
@@ -54,7 +55,7 @@ export const likeBook = async (bookId) => {
  */
 export const cancelLikeBook = async (bookId) => {
     try {
-        await axios.post(`${API_BASE_URL}/api/books/${bookId}/cancel-like`);
+        await apiClient.post(`${API_BASE_URL}/api/books/${bookId}/cancel-like`);
     } catch (error) {
         console.error("책 좋아요 취소 실패:", error);
         throw error;
@@ -68,7 +69,7 @@ export const cancelLikeBook = async (bookId) => {
  */
 export const startReadingBook = async (bookId) => {
     try {
-        await axios.post(`${API_BASE_URL}/api/books/${bookId}/reading`);
+        await apiClient.post(`${API_BASE_URL}/api/books/${bookId}/reading`);
     } catch (error) {
         console.error("책 읽기 시작 실패:", error);
         throw error;
@@ -82,7 +83,7 @@ export const startReadingBook = async (bookId) => {
  */
 export const completeBook = async (bookId) => {
     try {
-        await axios.post(`${API_BASE_URL}/api/books/${bookId}/done`);
+        await apiClient.post(`${API_BASE_URL}/api/books/${bookId}/done`);
     } catch (error) {
         console.error("책 읽기 완료 실패:", error);
         throw error;
@@ -96,7 +97,7 @@ export const completeBook = async (bookId) => {
  */
 export const deleteBook = async (bookId) => {
     try {
-        await axios.delete(`${API_BASE_URL}/api/books/${bookId}`);
+        await apiClient.delete(`${API_BASE_URL}/api/books/${bookId}`);
     } catch (error) {
         console.error("책 삭제 실패:", error);
         throw error;
@@ -109,7 +110,7 @@ export const deleteBook = async (bookId) => {
  */
 export const findBookRanks = async () => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/api/books/ranks`);
+        const response = await apiClient.get(`${API_BASE_URL}/api/books/ranks`);
         return response.data.data; // [{ rank, isbn, bookTitle, count }, ...]
     } catch (error) {
         console.error("책 랭킹 조회 실패:", error);

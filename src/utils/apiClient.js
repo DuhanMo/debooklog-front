@@ -1,7 +1,9 @@
 import axios from "axios";
 import { getAccessToken, removeAccessToken } from "./localStorage";
 
-const API_BASE_URL = "http://debooklog.ap-northeast-2.elasticbeanstalk.com";
+import CONFIG from "../config";
+
+const API_BASE_URL = CONFIG.API_BASE_URL;
 
 /**
  * Axios 인스턴스 생성

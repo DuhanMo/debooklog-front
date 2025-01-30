@@ -1,6 +1,8 @@
-import axios from "axios";
+import apiClient from "../utils/apiClient";
+import CONFIG from "../config";
 
-const API_BASE_URL = "http://debooklog.ap-northeast-2.elasticbeanstalk.com";
+const API_BASE_URL = CONFIG.API_BASE_URL;
+
 
 /**
  * 모든 책장 목록 조회
@@ -8,7 +10,7 @@ const API_BASE_URL = "http://debooklog.ap-northeast-2.elasticbeanstalk.com";
  */
 export const getBookshelves = async () => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/api/bookshelves`);
+        const response = await apiClient.get(`${API_BASE_URL}/api/bookshelves`);
         return response.data.data; // [{ id, memberId, name, imageUrl }, ...]
     } catch (error) {
         console.error("책장 목록 조회 실패:", error);
@@ -23,7 +25,7 @@ export const getBookshelves = async () => {
  */
 export const getBookshelfDetail = async (bookshelfId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/api/bookshelves/${bookshelfId}`);
+        const response = await apiClient.get(`${API_BASE_URL}/api/bookshelves/${bookshelfId}`);
         return response.data.data; // { id, name, imageUrl, books: [{ id, title, author, ... }] }
     } catch (error) {
         console.error("책장 상세 조회 실패:", error);
@@ -39,7 +41,7 @@ export const getBookshelfDetail = async (bookshelfId) => {
  */
 export const updateBookshelf = async (bookshelfId, name) => {
     try {
-        await axios.post(`${API_BASE_URL}/api/bookshelves/${bookshelfId}`, { name });
+        await apiClient.post(`${API_BASE_URL}/api/bookshelves/${bookshelfId}`, { name });
     } catch (error) {
         console.error("책장 업데이트 실패:", error);
         throw error;
