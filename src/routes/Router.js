@@ -30,13 +30,11 @@ const AppRouter = () => {
                 {/* OAuth 콜백 페이지 (로그인 과정) */}
                 <Route path="/oauth2/redirect" element={<OAuthCallback />} />
 
-                {/* 인증된 사용자만 접근 가능한 보호된 페이지 */}
-                <Route element={<PrivateRoute />}>
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/bookshelves/:bookshelfId" element={<BookshelfDetail />} />
-                    <Route path="/search" element={<BookSearch />} />
-                    <Route path="/ranks" element={<BookRank />} />
-                </Route>
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/bookshelves/:bookshelfId" element={<BookshelfDetail />} />
+                <Route path="/search" element={<BookSearch />} />
+                <Route path="/ranks" element={<BookRank />} />
+
 
                 {/* 404 페이지 */}
                 <Route path="*" element={<h1>페이지를 찾을 수 없습니다.</h1>} />

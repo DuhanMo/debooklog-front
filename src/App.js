@@ -9,12 +9,13 @@ import AppRouter from "./routes/Router";
  */
 const App = () => {
     return (
-        <AuthProvider>
-            <BookshelfProvider>
+        <BookshelfProvider> {/* ✅ BookshelfProvider가 먼저 감싸도록 수정 */}
+            <AuthProvider>
                 <AppRouter />
-            </BookshelfProvider>
-        </AuthProvider>
+            </AuthProvider>
+        </BookshelfProvider>
     );
 };
 
 export default App;
+

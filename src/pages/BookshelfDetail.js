@@ -3,17 +3,13 @@ import { useParams } from "react-router-dom";
 import { BookshelfContext } from "../context/BookshelfContext";
 import Loading from "../components/Loading";
 
-/**
- * 책장 상세 페이지
- * @returns {JSX.Element}
- */
 const BookshelfDetail = () => {
     const { bookshelfId } = useParams();
     const { selectedBookshelf, fetchBookshelfDetail } = useContext(BookshelfContext);
 
     useEffect(() => {
         fetchBookshelfDetail(bookshelfId);
-    }, [bookshelfId, fetchBookshelfDetail]);
+    }, [bookshelfId]); // ✅ fetchBookshelfDetail 제거 (불필요한 리렌더링 방지)
 
     if (!selectedBookshelf) {
         return <Loading />;

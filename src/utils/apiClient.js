@@ -1,23 +1,14 @@
 import axios from "axios";
 import { getAccessToken, removeAccessToken } from "./localStorage";
-
 import CONFIG from "../config";
 
-const API_BASE_URL = CONFIG.API_BASE_URL;
-
-/**
- * Axios 인스턴스 생성
- */
 const apiClient = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: CONFIG.API_BASE_URL,
     headers: {
         "Content-Type": "application/json",
     },
 });
 
-/**
- * 요청 인터셉터: 인증 토큰 자동 추가
- */
 apiClient.interceptors.request.use(
     (config) => {
         const token = getAccessToken();
@@ -29,15 +20,16 @@ apiClient.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-/**
- * 응답 인터셉터: 401 에러 처리 (로그아웃)
- */
 apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            removeAccessToken();
-            window.location.href = "/login";
+            removeAccessToken(); // ✅ 토큰 삭제
+
+            const currentPath = window.location.pathname; // ✅ 현재 페이지 URL 저장
+            sessionStorage.setItem("redirectAfterLogin", currentPath);
+
+            window.location.href = "/login"; // ✅ 로그인 페이지로 이동
         }
         return Promise.reject(error);
     }
