@@ -1,14 +1,13 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { login as authServiceLogin, logout as authServiceLogout } from "../services/authService";
 import { getAccessToken } from "../utils/localStorage";
+import { BookshelfContext } from "./BookshelfContext"; // ✅ BookshelfContext import
 
 export const AuthContext = createContext(null);
 
-/**
- * 인증 상태를 관리하는 컨텍스트 프로바이더
- */
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const { fetchBookshelves } = useContext(BookshelfContext); // ✅ 책장 갱신 함수 가져오기
 
     useEffect(() => {
         const token = getAccessToken();
@@ -18,23 +17,25 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     /**
-     * 로그인 (authService의 `login()` 사용)
+     * 로그인 (책장 목록도 갱신)
      */
     const login = async (code, provider) => {
         try {
-            await authServiceLogin(code, provider); // ✅ authService 활용
+            await authServiceLogin(code, provider);
             const token = getAccessToken();
             setUser({ token });
+
+            fetchBookshelves(); // ✅ 로그인 후 책장 목록 업데이트
         } catch (error) {
             console.error("로그인 실패:", error);
         }
     };
 
     /**
-     * 로그아웃 (authService의 `logout()` 사용)
+     * 로그아웃
      */
     const logout = () => {
-        authServiceLogout(); // ✅ authService 활용
+        authServiceLogout();
         setUser(null);
     };
 
