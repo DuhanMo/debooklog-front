@@ -1,24 +1,18 @@
 import React, { createContext, useState, useEffect } from "react";
-import { bookshelvesApi } from "../api";
+import { getBookshelves, getBookshelfDetail } from "../services/bookshelfService"; // ✅ services 사용
 
 export const BookshelfContext = createContext(null);
 
-/**
- * 책장 데이터를 관리하는 컨텍스트 프로바이더
- * @param {Object} props
- * @param {JSX.Element} props.children - 하위 컴포넌트
- * @returns {JSX.Element}
- */
 export const BookshelfProvider = ({ children }) => {
     const [bookshelves, setBookshelves] = useState([]);
     const [selectedBookshelf, setSelectedBookshelf] = useState(null);
 
     /**
-     * 모든 책장 목록을 불러오는 함수
+     * 책장 목록 조회
      */
     const fetchBookshelves = async () => {
         try {
-            const data = await bookshelvesApi.getBookshelves();
+            const data = await getBookshelves(); // ✅ services 사용
             setBookshelves(data);
         } catch (error) {
             console.error("책장 목록 불러오기 실패:", error);
@@ -26,12 +20,11 @@ export const BookshelfProvider = ({ children }) => {
     };
 
     /**
-     * 특정 책장 상세 정보를 불러오는 함수
-     * @param {number} bookshelfId - 조회할 책장 ID
+     * 특정 책장 상세 정보 조회
      */
     const fetchBookshelfDetail = async (bookshelfId) => {
         try {
-            const data = await bookshelvesApi.getBookshelfDetail(bookshelfId);
+            const data = await getBookshelfDetail(bookshelfId); // ✅ services 사용
             setSelectedBookshelf(data);
         } catch (error) {
             console.error("책장 상세 정보 불러오기 실패:", error);
@@ -43,14 +36,7 @@ export const BookshelfProvider = ({ children }) => {
     }, []);
 
     return (
-        <BookshelfContext.Provider
-            value={{
-                bookshelves,
-                selectedBookshelf,
-                fetchBookshelves,
-                fetchBookshelfDetail,
-            }}
-        >
+        <BookshelfContext.Provider value={{ bookshelves, selectedBookshelf, fetchBookshelves, fetchBookshelfDetail }}>
             {children}
         </BookshelfContext.Provider>
     );
