@@ -8,7 +8,6 @@ const Navigation = () => {
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        // 로그아웃 후 홈으로 이동
         navigate('/');
     };
 
@@ -17,6 +16,9 @@ const Navigation = () => {
             <ul>
                 <li>
                     <Link to="/">Home</Link>
+                </li>
+                <li>
+                    <Link to="/search">Book Search</Link>
                 </li>
                 {isLoggedIn ? (
                     <li>

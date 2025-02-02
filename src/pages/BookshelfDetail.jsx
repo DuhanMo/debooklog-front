@@ -2,25 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import bookshelfService from '../services/bookshelfService';
 import BookshelfEdit from '../components/BookshelfEdit';
-
-/**
- * JWT 토큰의 payload에서 subject(회원 식별자)를 추출하는 함수.
- * 실제 환경에서는 안정적인 라이브러리를 사용하는 것을 권장합니다.
- */
-const getLoggedInMemberId = () => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) return null;
-    try {
-        // JWT의 payload 부분(Base64로 인코딩된 부분)을 디코딩합니다.
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const payload = JSON.parse(window.atob(base64));
-        return Number(payload.sub);
-    } catch (error) {
-        console.error('Token parsing error:', error);
-        return null;
-    }
-};
+import {getLoggedInMemberId} from "../utils/auth";
 
 const BookshelfDetail = () => {
     const { bookshelfId } = useParams();
@@ -28,7 +10,7 @@ const BookshelfDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // 로그인된 사용자의 식별자 (숫자)
+    // 로그인된 사용자의 식별자
     const loggedInMemberId = getLoggedInMemberId();
 
     useEffect(() => {
@@ -36,8 +18,8 @@ const BookshelfDetail = () => {
             try {
                 const data = await bookshelfService.getBookshelfDetail(bookshelfId);
                 setBookshelf(data.data); // API 응답의 data 필드가 BookshelfDetailResponse 객체여야 함
-            } catch (err) {
-                setError(err);
+            } catch (error) {
+                setError(error);
             } finally {
                 setLoading(false);
             }

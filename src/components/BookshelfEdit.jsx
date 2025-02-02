@@ -29,8 +29,8 @@ const BookshelfEdit = ({ bookshelfId, currentName, onUpdate }) => {
             await bookshelfService.updateBookshelfName(bookshelfId, newName);
             if (onUpdate) onUpdate(newName);
             setIsEditing(false);
-        } catch (err) {
-            setError(err);
+        } catch (error) {
+            setError(error);
         } finally {
             setLoading(false);
         }

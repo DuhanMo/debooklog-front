@@ -12,8 +12,8 @@ const BookshelfList = () => {
             try {
                 const data = await bookshelfService.getBookshelves();
                 setBookshelves(data.data); // data.data: 책장 목록 배열
-            } catch (err) {
-                setError(err);
+            } catch (error) {
+                setError(error);
             } finally {
                 setLoading(false);
             }
