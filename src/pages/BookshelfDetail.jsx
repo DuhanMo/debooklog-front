@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import bookshelfService from '../services/bookshelfService';
-import BookshelfEdit from '../components/BookshelfEdit';
-import {getLoggedInMemberId} from "../utils/auth";
 import bookService from '../services/bookService';
+import BookshelfEdit from '../components/BookshelfEdit';
+import { getLoggedInMemberId } from '../utils/auth';
 
+// 책 상태를 한글로 변환하는 함수
 const getBookStateLabel = (state) => {
     const stateMapping = {
         READING: '읽는 중',
@@ -15,28 +16,29 @@ const getBookStateLabel = (state) => {
 
 const BookshelfDetail = () => {
     const { bookshelfId } = useParams();
+    const navigate = useNavigate();
     const [bookshelf, setBookshelf] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // 로그인된 사용자의 식별자
     const loggedInMemberId = getLoggedInMemberId();
+    const isLoggedIn = !!loggedInMemberId; // 로그인 여부 확인
 
     useEffect(() => {
         const fetchBookshelfDetail = async () => {
             try {
                 const data = await bookshelfService.getBookshelfDetail(bookshelfId);
-                setBookshelf(data.data); // API 응답의 data 필드가 BookshelfDetailResponse 객체여야 함
-            } catch (error) {
-                setError(error);
+                setBookshelf(data.data);
+            } catch (err) {
+                setError(err);
             } finally {
                 setLoading(false);
             }
         };
+
         fetchBookshelfDetail();
     }, [bookshelfId]);
 
-    // API 호출 후 책장명이 수정되었을 때 상태를 업데이트하는 함수
     const handleUpdate = (updatedName) => {
         setBookshelf((prev) => ({ ...prev, name: updatedName }));
     };
@@ -50,7 +52,7 @@ const BookshelfDetail = () => {
                 await bookService.markBookAsReading(bookId);
             }
 
-            // 상태 변경 후, 책 목록을 업데이트
+            // UI 업데이트
             setBookshelf((prev) => ({
                 ...prev,
                 books: prev.books.map((book) =>
@@ -64,11 +66,46 @@ const BookshelfDetail = () => {
         }
     };
 
+    // 책 좋아요 추가/취소 함수
+    const handleLikeToggle = async (book) => {
+        if (!isLoggedIn) {
+            navigate('/login'); // 비로그인 상태에서는 로그인 페이지로 이동
+            return;
+        }
+
+        const isLiked = book.bookLikes.some((like) => like.memberId === loggedInMemberId);
+
+        try {
+            if (isLiked) {
+                await bookService.cancelLikeBook(book.id);
+            } else {
+                await bookService.likeBook(book.id);
+            }
+
+            // UI 업데이트: 좋아요 상태 및 개수 변경
+            setBookshelf((prev) => ({
+                ...prev,
+                books: prev.books.map((b) =>
+                    b.id === book.id
+                        ? {
+                            ...b,
+                            likeCount: isLiked ? b.likeCount - 1 : b.likeCount + 1,
+                            bookLikes: isLiked
+                                ? b.bookLikes.filter((like) => like.memberId !== loggedInMemberId)
+                                : [...b.bookLikes, { memberId: loggedInMemberId }],
+                        }
+                        : b
+                ),
+            }));
+        } catch (err) {
+            alert('좋아요 변경 중 오류가 발생했습니다.');
+        }
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error occurred: {error.message}</p>;
     if (!bookshelf) return <p>No bookshelf found.</p>;
 
-    // 소유자 여부 확인: 로그인된 사용자의 ID와 책장의 memberId가 일치하는지 확인
     const isOwner = loggedInMemberId && loggedInMemberId === bookshelf.memberId;
 
     return (
@@ -78,10 +115,9 @@ const BookshelfDetail = () => {
             <img
                 src={bookshelf.imageUrl || '/user.png'}
                 alt={bookshelf.name}
-                style={{ width: '150px', height: 'auto' }}
+                style={{ width: '100px', height: 'auto' }}
             />
 
-            {/* 소유자인 경우에만 책장 이름 수정 폼을 표시 */}
             {isOwner && (
                 <div>
                     <h3>Edit Bookshelf Name</h3>
@@ -96,21 +132,31 @@ const BookshelfDetail = () => {
             <h2>Books</h2>
             {bookshelf.books && bookshelf.books.length > 0 ? (
                 <ul>
-                    {bookshelf.books.map((book) => (
-                        <li key={book.id}>
-                            <p>{book.title} by {book.author}</p>
-                            <img src={book.thumbnail || '/book.png'} alt={book.title}
-                                 style={{width: '100px', height: 'auto'}}/>
-                            <p>좋아요: {book.likeCount}</p>
-                            <p>상태: {getBookStateLabel(book.state)}</p>
-                            {/* 본인 책장일 경우 상태 변경 버튼 노출 */}
-                            {isOwner && (
-                                <button onClick={() => handleChangeState(book.id, book.state)}>
-                                    {book.state === 'READING' ? '독서 완료로 변경' : '읽는 중으로 변경'}
+                    {bookshelf.books.map((book) => {
+                        const isLiked = book.bookLikes.some((like) => like.memberId === loggedInMemberId);
+                        return (
+                            <li key={book.id}>
+                                <p>
+                                    {book.title} by {book.author}
+                                </p>
+                                <img src={book.thumbnail || '/book.png'} alt={book.title} />
+                                <p>Like Count: {book.likeCount}</p>
+                                <p>State: {getBookStateLabel(book.state)}</p>
+
+                                {/* 책 상태 변경 버튼 (본인 책장만) */}
+                                {isOwner && (
+                                    <button onClick={() => handleChangeState(book.id, book.state)}>
+                                        {book.state === 'READING' ? '독서 완료로 변경' : '읽는 중으로 변경'}
+                                    </button>
+                                )}
+
+                                {/* 좋아요 버튼 */}
+                                <button onClick={() => handleLikeToggle(book)}>
+                                    {isLiked ? '❤️' : '🤍'}
                                 </button>
-                            )}
-                        </li>
-                    ))}
+                            </li>
+                        );
+                    })}
                 </ul>
             ) : (
                 <p>No books available in this bookshelf.</p>

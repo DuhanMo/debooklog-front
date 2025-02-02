@@ -24,9 +24,21 @@ const markBookAsDone = async (bookId) => {
     return await apiClient.post(`/api/books/${bookId}/done`);
 };
 
+// 책 좋아요 추가
+const likeBook = async (bookId) => {
+    return await apiClient.post(`/api/books/${bookId}/like`);
+};
+
+// 책 좋아요 취소
+const cancelLikeBook = async (bookId) => {
+    return await apiClient.post(`/api/books/${bookId}/cancel-like`);
+};
+
 export default {
     searchBooks,
     registerBook,
     markBookAsReading,
     markBookAsDone,
+    likeBook,
+    cancelLikeBook,
 };
