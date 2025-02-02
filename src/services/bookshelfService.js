@@ -14,7 +14,15 @@ const getBookshelfDetail = async (bookshelfId) => {
     return response.data;
 };
 
+// 책장명 수정 API 호출 (BookshelfUpdateRequest: { name: string })
+const updateBookshelfName = async (bookshelfId, newName) => {
+    const response = await apiClient.post(`/api/bookshelves/${bookshelfId}`, { name: newName });
+    // 응답 구조: { message: string }
+    return response.data;
+};
+
 export default {
     getBookshelves,
     getBookshelfDetail,
+    updateBookshelfName,
 };
