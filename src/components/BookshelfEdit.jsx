@@ -1,26 +1,89 @@
-import React, { useState } from 'react';
-import bookshelfService from '../services/bookshelfService';
+import React, { useState } from "react";
+import styled from "styled-components";
+import bookshelfService from "../services/bookshelfService";
 
+/* ✅ 스타일 정의 */
+const EditContainer = styled.div`
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const Form = styled.form`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+`;
+
+const Input = styled.input`
+    font-family: "Inter", "Nunito Sans", "Noto Sans", sans-serif;
+    font-size: 16px;
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    transition: border 0.2s ease-in-out;
+    outline: none;
+    width: 200px;
+    
+    &:focus {
+        border-color: #0073e6;
+    }
+
+    &:disabled {
+        background-color: #f5f5f5;
+        color: #999;
+        cursor: not-allowed;
+    }
+`;
+
+const Button = styled.button`
+    font-family: inherit;
+    font-size: 14px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+    
+    ${({ variant }) =>
+    variant === "save"
+        ? `background: #0073e6; color: white;
+               &:hover { background: #005bb5; }`
+        : variant === "cancel"
+            ? `background: #ddd; color: black;
+               &:hover { background: #bbb; }`
+            : `background: #ff4d4f; color: white;
+               &:hover { background: #d9363e; }`
+}
+
+    &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+`;
+
+const ErrorMessage = styled.p`
+    color: red;
+    font-size: 14px;
+    margin-top: 8px;
+`;
+
+/* ✅ 컴포넌트 */
 const BookshelfEdit = ({ bookshelfId, currentName, onUpdate }) => {
-    // newName: 현재 입력값, isEditing: 편집 모드 여부
     const [newName, setNewName] = useState(currentName);
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // 편집 모드로 전환
-    const handleEditToggle = () => {
-        setIsEditing(true);
-    };
+    const handleEditToggle = () => setIsEditing(true);
 
-    // 취소 시 원래 값으로 복구하고 편집 모드를 종료
     const handleCancel = () => {
         setNewName(currentName);
         setIsEditing(false);
         setError(null);
     };
 
-    // 수정 저장: API 호출 후 편집 모드 종료
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -37,32 +100,32 @@ const BookshelfEdit = ({ bookshelfId, currentName, onUpdate }) => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <input
+        <EditContainer>
+            <Form onSubmit={handleSubmit}>
+                <Input
                     type="text"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    placeholder="Enter new bookshelf name"
+                    placeholder="책장 이름을 입력하세요"
                     disabled={!isEditing}
                 />
                 {isEditing ? (
                     <>
-                        <button type="submit" disabled={loading}>
-                            {loading ? 'Saving...' : 'Save'}
-                        </button>
-                        <button type="button" onClick={handleCancel} disabled={loading}>
-                            Cancel
-                        </button>
+                        <Button type="submit" variant="save" disabled={loading}>
+                            {loading ? "저장 중..." : "저장"}
+                        </Button>
+                        <Button type="button" variant="cancel" onClick={handleCancel} disabled={loading}>
+                            취소
+                        </Button>
                     </>
                 ) : (
-                    <button type="button" onClick={handleEditToggle}>
-                        Edit
-                    </button>
+                    <Button type="button" onClick={handleEditToggle}>
+                        수정
+                    </Button>
                 )}
-            </form>
-            {error && <p style={{ color: 'red' }}>Error: {error.message}</p>}
-        </div>
+            </Form>
+            {error && <ErrorMessage>에러 발생: {error.message}</ErrorMessage>}
+        </EditContainer>
     );
 };
 
