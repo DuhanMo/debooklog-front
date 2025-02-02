@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import bookshelfService from '../services/bookshelfService';
 import BookshelfEdit from '../components/BookshelfEdit';
 import {getLoggedInMemberId} from "../utils/auth";
+import bookService from '../services/bookService';
 
 const getBookStateLabel = (state) => {
     const stateMapping = {
@@ -11,6 +12,7 @@ const getBookStateLabel = (state) => {
     };
     return stateMapping[state] || '상태 없음';
 };
+
 const BookshelfDetail = () => {
     const { bookshelfId } = useParams();
     const [bookshelf, setBookshelf] = useState(null);
@@ -37,6 +39,29 @@ const BookshelfDetail = () => {
     // API 호출 후 책장명이 수정되었을 때 상태를 업데이트하는 함수
     const handleUpdate = (updatedName) => {
         setBookshelf((prev) => ({ ...prev, name: updatedName }));
+    };
+
+    // 책 상태 변경 함수
+    const handleChangeState = async (bookId, currentState) => {
+        try {
+            if (currentState === 'READING') {
+                await bookService.markBookAsDone(bookId);
+            } else {
+                await bookService.markBookAsReading(bookId);
+            }
+
+            // 상태 변경 후, 책 목록을 업데이트
+            setBookshelf((prev) => ({
+                ...prev,
+                books: prev.books.map((book) =>
+                    book.id === bookId
+                        ? { ...book, state: currentState === 'READING' ? 'DONE' : 'READING' }
+                        : book
+                ),
+            }));
+        } catch (err) {
+            alert('상태 변경 중 오류가 발생했습니다.');
+        }
     };
 
     if (loading) return <p>Loading...</p>;
@@ -78,6 +103,12 @@ const BookshelfDetail = () => {
                                  style={{width: '100px', height: 'auto'}}/>
                             <p>좋아요: {book.likeCount}</p>
                             <p>상태: {getBookStateLabel(book.state)}</p>
+                            {/* 본인 책장일 경우 상태 변경 버튼 노출 */}
+                            {isOwner && (
+                                <button onClick={() => handleChangeState(book.id, book.state)}>
+                                    {book.state === 'READING' ? '독서 완료로 변경' : '읽는 중으로 변경'}
+                                </button>
+                            )}
                         </li>
                     ))}
                 </ul>
