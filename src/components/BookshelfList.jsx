@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import bookshelfService from '../services/bookshelfService';
 
 const BookshelfList = () => {
@@ -10,7 +11,7 @@ const BookshelfList = () => {
         const fetchBookshelves = async () => {
             try {
                 const data = await bookshelfService.getBookshelves();
-                setBookshelves(data.data); // API 응답 구조: { message: string, data: BookshelfResponse[] }
+                setBookshelves(data.data); // data.data: 책장 목록 배열
             } catch (err) {
                 setError(err);
             } finally {
@@ -30,7 +31,11 @@ const BookshelfList = () => {
             <ul>
                 {bookshelves.map((bookshelf) => (
                     <li key={bookshelf.id}>
-                        {bookshelf.name}
+                        {/* 책장 이름을 클릭 시 상세 페이지로 이동 */}
+                        <Link to={`/bookshelves/${bookshelf.id}`}>
+                            {bookshelf.name}
+                        </Link>
+                        <br />
                         <img
                             src={bookshelf.imageUrl || '/user.png'}
                             alt={bookshelf.name}
