@@ -34,6 +34,12 @@ const cancelLikeBook = async (bookId) => {
     return await apiClient.post(`/api/books/${bookId}/cancel-like`);
 };
 
+// 책 랭킹 조회
+const getBookRanks = async () => {
+    const response = await apiClient.get('/api/books/ranks');
+    return response.data;
+};
+
 export default {
     searchBooks,
     registerBook,
@@ -41,4 +47,5 @@ export default {
     markBookAsDone,
     likeBook,
     cancelLikeBook,
+    getBookRanks,
 };
