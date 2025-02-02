@@ -4,6 +4,13 @@ import bookshelfService from '../services/bookshelfService';
 import BookshelfEdit from '../components/BookshelfEdit';
 import {getLoggedInMemberId} from "../utils/auth";
 
+const getBookStateLabel = (state) => {
+    const stateMapping = {
+        READING: '읽는 중',
+        DONE: '독서 완료',
+    };
+    return stateMapping[state] || '상태 없음';
+};
 const BookshelfDetail = () => {
     const { bookshelfId } = useParams();
     const [bookshelf, setBookshelf] = useState(null);
@@ -46,7 +53,7 @@ const BookshelfDetail = () => {
             <img
                 src={bookshelf.imageUrl || '/user.png'}
                 alt={bookshelf.name}
-                style={{ width: '100px', height: 'auto' }}
+                style={{ width: '150px', height: 'auto' }}
             />
 
             {/* 소유자인 경우에만 책장 이름 수정 폼을 표시 */}
@@ -67,7 +74,10 @@ const BookshelfDetail = () => {
                     {bookshelf.books.map((book) => (
                         <li key={book.id}>
                             <p>{book.title} by {book.author}</p>
-                            <img src={book.thumbnail} alt={book.title} />
+                            <img src={book.thumbnail || '/book.png'} alt={book.title}
+                                 style={{width: '100px', height: 'auto'}}/>
+                            <p>좋아요: {book.likeCount}</p>
+                            <p>상태: {getBookStateLabel(book.state)}</p>
                         </li>
                     ))}
                 </ul>
