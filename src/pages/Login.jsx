@@ -46,10 +46,20 @@ const Description = styled.p`
     margin-bottom: 24px;
 `;
 
+// 📌 버튼 컨테이너 (버튼들의 너비를 동일하게 맞추기 위함)
+const ButtonContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* ✅ 버튼 간격 균일하게 */
+`;
+
 // 📌 버튼 스타일
 const LoginButton = styled.a`
-    display: block;
-    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* ✅ 버튼 크기 균일화 */
+    box-sizing: border-box; /* ✅ padding 포함해서 크기 계산 */
     padding: 12px;
     border-radius: 8px;
     font-size: 16px;
@@ -58,7 +68,6 @@ const LoginButton = styled.a`
     background: ${({ color }) => color};
     text-align: center;
     text-decoration: none;
-    margin-bottom: 12px;
     transition: opacity 0.2s ease-in-out;
 
     &:hover {
@@ -72,16 +81,18 @@ const Login = () => {
             <LoginBox>
                 <Title>소셜 로그인</Title>
                 <Description>로그인할 소셜 계정을 선택해주세요.</Description>
-                {providers.map((provider) => (
-                    <LoginButton
-                        key={provider.name}
-                        href={`${BASE_URL}/oauth2/code/${provider.name}`}
-                        color={provider.color}
-                        provider={provider.name}
-                    >
-                        {provider.label}
-                    </LoginButton>
-                ))}
+                <ButtonContainer>
+                    {providers.map((provider) => (
+                        <LoginButton
+                            key={provider.name}
+                            href={`${BASE_URL}/oauth2/code/${provider.name}`}
+                            color={provider.color}
+                            provider={provider.name}
+                        >
+                            {provider.label}
+                        </LoginButton>
+                    ))}
+                </ButtonContainer>
             </LoginBox>
         </Container>
     );
