@@ -5,9 +5,10 @@ import bookService from "../services/bookService";
 import bookshelfService from "../services/bookshelfService";
 import { getLoggedInMemberId } from "../utils/auth";
 
-// 📌 컨테이너 스타일
+// 📌 컨테이너 스타일 (가운데 정렬 추가)
 const Container = styled.div`
-    max-width: 800px;
+    max-width: 900px; /* ✅ 홈 화면과 동일하게 설정 */
+    margin: 0 auto; /* ✅ 가운데 정렬 */
     padding: 40px 20px;
     background: #f7f7f7;
     min-height: 100vh;
