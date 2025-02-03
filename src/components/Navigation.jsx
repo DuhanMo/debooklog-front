@@ -6,7 +6,7 @@ const Navbar = styled.nav`
     top: 0;
     left: 0;
     width: 100%;
-    height: 60px; /* ✅ 네비게이션 높이 고정 */
+    height: 60px;
     background: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -19,7 +19,7 @@ const NavList = styled.ul`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px; /* ✅ 항목 간격 */
+    gap: 40px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -31,23 +31,18 @@ const NavItem = styled.li`
 `;
 
 const StyledLink = styled(Link)`
-    text-decoration: none; /* ✅ 밑줄 제거 */
-    color: inherit;
+    text-decoration: none;
+    color: inherit; /* ✅ 기본 색상 유지 */
     font-size: 16px;
     font-weight: bold;
     transition: color 0.2s ease-in-out;
 
     &:hover {
-        color: #ff4d4f;
-    }
-
-    &:active {
-        color: #ff4d4f; /* ✅ 클릭 시 빨간색 */
+        color: #ff4d4f; /* ✅ 호버 시 빨간색 */
     }
 
     &:focus {
-        color: inherit; /* ✅ 클릭 후 다시 원래 색상으로 복구 */
-        outline: none;
+        color: inherit; /* ✅ 클릭 후 색 유지 X */
     }
 `;
 
@@ -57,19 +52,9 @@ const LogoutText = styled.span`
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: color 0.2s ease-in-out;
 
     &:hover {
         color: #ff4d4f;
-    }
-
-    &:active {
-        color: #ff4d4f; /* ✅ 클릭 시 빨간색 */
-    }
-
-    &:focus {
-        color: inherit; /* ✅ 클릭 후 다시 원래 색상으로 복구 */
-        outline: none;
     }
 `;
 
