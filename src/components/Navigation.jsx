@@ -35,9 +35,19 @@ const StyledLink = styled(Link)`
     color: inherit;
     font-size: 16px;
     font-weight: bold;
+    transition: color 0.2s ease-in-out;
 
     &:hover {
         color: #ff4d4f;
+    }
+
+    &:active {
+        color: #ff4d4f; /* ✅ 클릭 시 빨간색 */
+    }
+
+    &:focus {
+        color: inherit; /* ✅ 클릭 후 다시 원래 색상으로 복구 */
+        outline: none;
     }
 `;
 
@@ -47,9 +57,19 @@ const LogoutText = styled.span`
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.2s ease-in-out;
 
     &:hover {
         color: #ff4d4f;
+    }
+
+    &:active {
+        color: #ff4d4f; /* ✅ 클릭 시 빨간색 */
+    }
+
+    &:focus {
+        color: inherit; /* ✅ 클릭 후 다시 원래 색상으로 복구 */
+        outline: none;
     }
 `;
 
